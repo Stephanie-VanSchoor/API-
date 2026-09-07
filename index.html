@@ -1,0 +1,1974 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ImmoHub Pro v3.0 - Data Hub Immobilier</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        /* ============================================================
+                   RESET & BASE
+                ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f4fa;
+            color: #0b1a2e;
+            min-height: 100vh;
+        }
+
+        /* ============================================================
+                   LOGIN SCREEN
+                ============================================================ */
+        #loginScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(145deg, #0b3b5c, #1a5a7a);
+            padding: 20px;
+        }
+        .login-box {
+            background: white;
+            padding: 48px 40px;
+            border-radius: 32px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.30);
+        }
+        .login-box .logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .login-box .logo .icon {
+            font-size: 48px;
+            background: #0b3b5c;
+            color: white;
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        .login-box .logo h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0b3b5c;
+        }
+        .login-box .logo p {
+            color: #5b6f87;
+            font-size: 14px;
+        }
+        .login-box .form-group {
+            margin-bottom: 16px;
+        }
+        .login-box .form-group label {
+            font-weight: 600;
+            font-size: 13px;
+            color: #1a2a3e;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .login-box .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1.5px solid #d9e1ed;
+            font-size: 14px;
+            transition: 0.2s;
+            outline: none;
+        }
+        .login-box .form-group input:focus {
+            border-color: #0b3b5c;
+            box-shadow: 0 0 0 4px rgba(11, 59, 92, 0.10);
+        }
+        .login-box .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #0b3b5c;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .login-box .btn-login:hover {
+            background: #124a6e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(11, 59, 92, 0.30);
+        }
+        .login-box .demo-hint {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 13px;
+            color: #5b6f87;
+        }
+        .login-box .demo-hint span {
+            background: #e8edf5;
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        /* ============================================================
+                   MAIN APP (caché par défaut)
+                ============================================================ */
+        #appContainer {
+            display: none;
+            max-width: 1440px;
+            width: 100%;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 25px 80px rgba(0, 20, 40, 0.10);
+            overflow: hidden;
+        }
+
+        /* ============================================================
+                   TOP BAR
+                ============================================================ */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 32px;
+            background: #ffffff;
+            border-bottom: 1px solid #e9eef6;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .topbar .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .topbar .brand .icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(145deg, #0b3b5c, #1a5a7a);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 20px;
+        }
+        .topbar .brand h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0b3b5c;
+        }
+        .topbar .brand .tag {
+            font-size: 10px;
+            font-weight: 600;
+            color: #1a7a5a;
+            background: #e3f5ed;
+            padding: 2px 10px;
+            border-radius: 40px;
+            margin-left: 4px;
+        }
+        .topbar .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .topbar .actions .user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8faff;
+            padding: 4px 14px 4px 10px;
+            border-radius: 40px;
+            border: 1px solid #e9eef6;
+            cursor: pointer;
+        }
+        .topbar .actions .user .avatar {
+            width: 30px;
+            height: 30px;
+            background: #0b3b5c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .topbar .actions .user span {
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .btn {
+            padding: 7px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 12px;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: #0b3b5c;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #124a6e;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(11, 59, 92, 0.25);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #d0d9e8;
+            color: #1a2a3e;
+        }
+        .btn-outline:hover {
+            background: #f0f4fe;
+            border-color: #6a8bb0;
+        }
+        .btn-success {
+            background: #1a7a5a;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #1f8f6a;
+        }
+        .btn-danger {
+            background: #b13e3e;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #c94a4a;
+        }
+        .btn-gold {
+            background: #e6a020;
+            color: #fff;
+        }
+        .btn-gold:hover {
+            background: #f0b030;
+        }
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 11px;
+        }
+
+        /* ============================================================
+                   DASHBOARD
+                ============================================================ */
+        .dashboard {
+            display: flex;
+            min-height: 600px;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 220px;
+            background: #f8faff;
+            border-right: 1px solid #e9eef6;
+            padding: 20px 14px;
+            flex-shrink: 0;
+        }
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 9px 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #3d536b;
+            cursor: pointer;
+            transition: 0.15s;
+            margin-bottom: 2px;
+        }
+        .sidebar .menu-item:hover {
+            background: #e9eef6;
+            color: #0b3b5c;
+        }
+        .sidebar .menu-item.active {
+            background: #0b3b5c;
+            color: #fff;
+        }
+        .sidebar .menu-item i {
+            width: 18px;
+            text-align: center;
+        }
+        .sidebar .menu-divider {
+            height: 1px;
+            background: #e9eef6;
+            margin: 12px 0;
+        }
+        .sidebar .plan-badge {
+            background: #e3f5ed;
+            color: #1a7a5a;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 10px 14px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 12px;
+        }
+        .sidebar .plan-badge .price {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        /* --- Main --- */
+        .main {
+            flex: 1;
+            padding: 24px 28px 28px 28px;
+            min-width: 0;
+        }
+
+        /* ============================================================
+                   PAGES (affichage par onglet)
+                ============================================================ */
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+
+        /* ============================================================
+                   STATS
+                ============================================================ */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: #f8faff;
+            border-radius: 14px;
+            padding: 16px 18px;
+            border: 1px solid #e9eef6;
+            transition: 0.2s;
+        }
+        .stat-card:hover {
+            border-color: #b8cbe0;
+        }
+        .stat-card .label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #5b6f87;
+        }
+        .stat-card .value {
+            font-size: 26px;
+            font-weight: 800;
+            color: #0b3b5c;
+            margin-top: 2px;
+        }
+        .stat-card .sub {
+            font-size: 12px;
+            color: #5b6f87;
+            margin-top: 2px;
+        }
+        .stat-card .sub.green {
+            color: #1a7a5a;
+        }
+        .stat-card .sub.red {
+            color: #b13e3e;
+        }
+
+        /* ============================================================
+                   TOOLBAR
+                ============================================================ */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 18px;
+            padding: 12px 16px;
+            background: #f8faff;
+            border-radius: 14px;
+            border: 1px solid #e9eef6;
+        }
+        .toolbar .group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .toolbar label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #3d536b;
+        }
+        .toolbar select,
+        .toolbar input {
+            padding: 5px 12px;
+            border-radius: 40px;
+            border: 1.5px solid #d9e1ed;
+            background: white;
+            font-size: 12px;
+            font-weight: 500;
+            color: #1a2639;
+            outline: none;
+            transition: 0.2s;
+        }
+        .toolbar select:focus,
+        .toolbar input:focus {
+            border-color: #0b3b5c;
+            box-shadow: 0 0 0 3px rgba(11, 59, 92, 0.08);
+        }
+        .toolbar .spacer {
+            flex: 1;
+        }
+
+        /* ============================================================
+                   TABLE
+                ============================================================ */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 14px;
+            border: 1px solid #e9eef6;
+            background: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        thead {
+            background: #f8faff;
+            border-bottom: 2px solid #e9eef6;
+        }
+        thead th {
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 600;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #3d536b;
+            white-space: nowrap;
+        }
+        tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #eef3f9;
+            vertical-align: middle;
+        }
+        tbody tr:hover {
+            background: #fafcff;
+        }
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .prop-name {
+            font-weight: 700;
+            color: #0b3b5c;
+        }
+        .prop-loc {
+            font-size: 11px;
+            color: #5b6f87;
+        }
+        .source-tag {
+            background: #ecf3fa;
+            color: #1a4b6d;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 10px;
+            border-radius: 40px;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        .status-tag {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 40px;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        .status-tag.verified {
+            background: #e3f5ed;
+            color: #1a7a5a;
+        }
+        .status-tag.pending {
+            background: #fff3e0;
+            color: #b76e1e;
+        }
+        .status-tag.discrepancy {
+            background: #fde8e8;
+            color: #b13e3e;
+        }
+        .conf-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .conf-track {
+            width: 60px;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .conf-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: #0b3b5c;
+        }
+        .conf-fill.high {
+            background: #1a7a5a;
+        }
+        .conf-fill.medium {
+            background: #e6a020;
+        }
+        .conf-fill.low {
+            background: #b13e3e;
+        }
+        .actions-cell {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        /* Checkbox pour comparateur */
+        .compare-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #0b3b5c;
+        }
+
+        /* ============================================================
+                   COMPARATEUR (barre flottante)
+                ============================================================ */
+        #compareBar {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0b3b5c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            box-shadow: 0 12px 40px rgba(11, 59, 92, 0.40);
+            z-index: 100;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        #compareBar.active {
+            display: flex;
+        }
+        #compareBar .count {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        #compareBar .btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.20);
+        }
+        #compareBar .btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        #compareBar .btn-success {
+            background: #1a7a5a;
+            border: none;
+        }
+
+        /* ============================================================
+                   MODAL
+                ============================================================ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: white;
+            max-width: 580px;
+            width: 100%;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.20);
+            animation: fadeUp 0.25s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .modal h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0b3b5c;
+            margin-bottom: 2px;
+        }
+        .modal .modal-sub {
+            color: #5b6f87;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .modal .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .modal .detail-item {
+            background: #f8faff;
+            border-radius: 12px;
+            padding: 12px 14px;
+            border: 1px solid #e9eef6;
+        }
+        .modal .detail-item .label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6a7e96;
+            font-weight: 600;
+        }
+        .modal .detail-item .value {
+            font-weight: 600;
+            color: #0b3b5c;
+            margin-top: 2px;
+            word-break: break-word;
+            font-size: 14px;
+        }
+        .modal .detail-item .value.mono {
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .modal .actions-modal {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .modal .actions-modal .btn {
+            flex: 1;
+            justify-content: center;
+            padding: 10px;
+            min-width: 100px;
+        }
+
+        /* ============================================================
+                   PAGE TARIFS
+                ============================================================ */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 16px;
+        }
+        .pricing-card {
+            background: #f8faff;
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid #e9eef6;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .pricing-card:hover {
+            border-color: #0b3b5c;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+        }
+        .pricing-card.popular {
+            border-color: #0b3b5c;
+            background: #f5f9ff;
+        }
+        .pricing-card .plan-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0b3b5c;
+        }
+        .pricing-card .plan-price {
+            font-size: 32px;
+            font-weight: 800;
+            color: #0b3b5c;
+            margin: 8px 0;
+        }
+        .pricing-card .plan-price span {
+            font-size: 14px;
+            font-weight: 400;
+            color: #5b6f87;
+        }
+        .pricing-card .plan-features {
+            list-style: none;
+            text-align: left;
+            margin: 16px 0;
+            font-size: 13px;
+            color: #1a2a3e;
+        }
+        .pricing-card .plan-features li {
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pricing-card .plan-features li i {
+            color: #1a7a5a;
+            width: 16px;
+        }
+        .pricing-card .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 12px;
+        }
+        .pricing-card .badge-popular {
+            background: #0b3b5c;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 14px;
+            border-radius: 40px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        /* ============================================================
+                   PAGE SCRAPING
+                ============================================================ */
+        .scraping-results {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+        .scraping-card {
+            background: #f8faff;
+            border-radius: 12px;
+            padding: 14px 18px;
+            border: 1px solid #e9eef6;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .scraping-card .info {
+            flex: 1;
+        }
+        .scraping-card .info .name {
+            font-weight: 700;
+            color: #0b3b5c;
+        }
+        .scraping-card .info .addr {
+            font-size: 12px;
+            color: #5b6f87;
+        }
+        .scraping-card .btn {
+            font-size: 11px;
+        }
+
+        /* ============================================================
+                   DEMO TOUR (pop-up)
+                ============================================================ */
+        .demo-popup {
+            position: fixed;
+            bottom: 80px;
+            right: 24px;
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 340px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.20);
+            border: 1px solid #e9eef6;
+            z-index: 50;
+            display: none;
+            animation: fadeUp 0.3s ease-out;
+        }
+        .demo-popup.active {
+            display: block;
+        }
+        .demo-popup .title {
+            font-weight: 800;
+            color: #0b3b5c;
+            font-size: 16px;
+        }
+        .demo-popup .desc {
+            font-size: 13px;
+            color: #5b6f87;
+            margin: 6px 0 14px 0;
+        }
+        .demo-popup .step {
+            font-size: 12px;
+            font-weight: 600;
+            color: #0b3b5c;
+            background: #ecf3fa;
+            padding: 6px 12px;
+            border-radius: 40px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .demo-popup .btn-close-demo {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #5b6f87;
+        }
+
+        /* ============================================================
+                   RESPONSIVE
+                ============================================================ */
+        @media (max-width: 1000px) {
+            .sidebar {
+                display: none;
+            }
+            .main {
+                padding: 16px;
+            }
+            .topbar {
+                padding: 12px 16px;
+            }
+        }
+        @media (max-width: 700px) {
+            #appContainer {
+                margin: 10px;
+                border-radius: 20px;
+            }
+            .topbar .brand h1 {
+                font-size: 16px;
+            }
+            .topbar .brand .tag {
+                display: none;
+            }
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .toolbar .group {
+                flex-wrap: wrap;
+            }
+            .modal {
+                padding: 20px;
+            }
+            .modal .detail-grid {
+                grid-template-columns: 1fr;
+            }
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            .login-box {
+                padding: 32px 24px;
+            }
+            .scraping-results {
+                grid-template-columns: 1fr;
+            }
+            #compareBar {
+                bottom: 12px;
+                padding: 10px 16px;
+                border-radius: 40px;
+                font-size: 13px;
+                width: 95%;
+            }
+            .demo-popup {
+                right: 12px;
+                left: 12px;
+                max-width: none;
+            }
+        }
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            .topbar .actions .user span {
+                display: none;
+            }
+            .topbar .actions .user {
+                padding: 2px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    LOGIN SCREEN
+    ============================================================ -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <div class="logo">
+                <div class="icon"><i class="fas fa-building"></i></div>
+                <h1>ImmoHub Pro</h1>
+                <p>Plateforme immobilière fiable</p>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="loginEmail" value="demo@immo.fr" />
+            </div>
+            <div class="form-group">
+                <label>Mot de passe</label>
+                <input type="password" id="loginPassword" value="demo123" />
+            </div>
+            <button class="btn-login" onclick="handleLogin()">
+                <i class="fas fa-sign-in-alt"></i> Se connecter
+            </button>
+            <div class="demo-hint">
+                🔑 Identifiants : <span>demo@immo.fr</span> / <span>demo123</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    MAIN APP
+    ============================================================ -->
+    <div id="appContainer">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="brand">
+                <div class="icon"><i class="fas fa-building"></i></div>
+                <div>
+                    <h1>ImmoHub <span style="font-weight:400;color:#4b6f8a;">Pro</span></h1>
+                    <span class="tag"><i class="fas fa-shield-alt"></i> Sourcé</span>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-gold btn-sm" onclick="toggleDemo()"><i class="fas fa-play"></i> Demo</button>
+                <button class="btn btn-outline btn-sm" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button class="btn btn-outline btn-sm" onclick="alert('📤 Export CSV généré')"><i class="fas fa-file-csv"></i> CSV</button>
+                <div class="user" onclick="logout()">
+                    <div class="avatar">JD</div>
+                    <span id="userName">Jean Dupont</span>
+                    <i class="fas fa-chevron-down" style="font-size:10px;color:#5b6f87;"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD -->
+        <div class="dashboard">
+
+            <!-- SIDEBAR -->
+            <nav class="sidebar">
+                <div class="menu-item active" data-page="dashboard" onclick="switchPage('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Tableau de bord
+                </div>
+                <div class="menu-item" data-page="biens" onclick="switchPage('biens')">
+                    <i class="fas fa-home"></i> Biens
+                </div>
+                <div class="menu-item" data-page="comparateur" onclick="switchPage('comparateur')">
+                    <i class="fas fa-balance-scale"></i> Comparateur
+                </div>
+                <div class="menu-item" data-page="tarifs" onclick="switchPage('tarifs')">
+                    <i class="fas fa-euro-sign"></i> Tarifs
+                </div>
+                <div class="menu-item" data-page="scraping" onclick="switchPage('scraping')">
+                    <i class="fas fa-search"></i> Scraping
+                </div>
+                <div class="menu-divider"></div>
+                <div class="menu-item" data-page="rapports" onclick="switchPage('rapports')">
+                    <i class="fas fa-file-alt"></i> Rapports
+                </div>
+                <div class="menu-item" onclick="alert('⚙️ Paramètres en cours de développement')">
+                    <i class="fas fa-cog"></i> Paramètres
+                </div>
+                <div class="plan-badge">
+                    <i class="fas fa-crown"></i> Plan Pro<br>
+                    <span class="price">49€</span><span style="font-size:11px;font-weight:400;"> /mois</span>
+                </div>
+            </nav>
+
+            <!-- MAIN -->
+            <main class="main">
+
+                <!-- ============================================================
+                PAGE : DASHBOARD
+                ============================================================ -->
+                <div class="page active" id="page-dashboard">
+                    <div class="stats" id="statsContainer"></div>
+
+                    <h3 style="font-size:16px;margin-bottom:12px;color:#0b3b5c;">
+                        <i class="fas fa-clock"></i> Derniers biens ajoutés
+                    </h3>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Bien</th>
+                                    <th>Valeur</th>
+                                    <th>Source</th>
+                                    <th>Confiance</th>
+                                    <th>Statut</th>
+                                    <th style="text-align:center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE : BIENS (avec comparateur)
+                ============================================================ -->
+                <div class="page" id="page-biens">
+                    <div class="toolbar">
+                        <div class="group">
+                            <label><i class="fas fa-filter"></i> Source</label>
+                            <select id="sourceFilter">
+                                <option value="all">Toutes</option>
+                                <option value="notaire">Base notariale</option>
+                                <option value="cadastre">Cadastre</option>
+                                <option value="dvf">DVF</option>
+                                <option value="annonces">Annonces</option>
+                                <option value="diagnostic">Diagnostics</option>
+                            </select>
+                        </div>
+                        <div class="group">
+                            <label>Statut</label>
+                            <select id="statusFilter">
+                                <option value="all">Tous</option>
+                                <option value="verified">Vérifié</option>
+                                <option value="pending">En attente</option>
+                                <option value="discrepancy">Écart</option>
+                            </select>
+                        </div>
+                        <div class="group">
+                            <input type="text" id="searchInput" placeholder="🔍 Rechercher..." style="min-width:140px;" />
+                        </div>
+                        <span class="spacer"></span>
+                        <button class="btn btn-outline btn-sm" onclick="addProperty()"><i class="fas fa-plus"></i> Ajouter</button>
+                        <span style="font-size:12px;color:#5b6f87;">
+                            <i class="fas fa-check-square"></i> <span id="compareCount">0</span> sélectionné(s)
+                        </span>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:40px;">🔄</th>
+                                    <th>Bien</th>
+                                    <th>Valeur</th>
+                                    <th>Source</th>
+                                    <th>Confiance</th>
+                                    <th>Statut</th>
+                                    <th style="text-align:center;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE : COMPARATEUR
+                ============================================================ -->
+                <div class="page" id="page-comparateur">
+                    <h3 style="font-size:18px;color:#0b3b5c;">
+                        <i class="fas fa-balance-scale"></i> Comparateur de biens
+                    </h3>
+                    <p style="color:#5b6f87;font-size:14px;margin-bottom:16px;">
+                        Sélectionnez 2 à 4 biens dans la page "Biens" pour les comparer ici.
+                    </p>
+                    <div id="compareContainer" style="background:#f8faff;border-radius:16px;padding:24px;border:2px dashed #d0d9e8;text-align:center;color:#5b6f87;">
+                        <i class="fas fa-arrows-h" style="font-size:32px;display:block;margin-bottom:8px;"></i>
+                        Aucun bien sélectionné. Allez dans la page <strong>Biens</strong> et cochez les biens à comparer.
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE : TARIFS
+                ============================================================ -->
+                <div class="page" id="page-tarifs">
+                    <h3 style="font-size:18px;color:#0b3b5c;">
+                        <i class="fas fa-euro-sign"></i> Nos offres
+                    </h3>
+                    <p style="color:#5b6f87;font-size:14px;margin-bottom:16px;">
+                        Choisissez la formule adaptée à votre activité.
+                    </p>
+                    <div class="pricing-grid">
+                        <div class="pricing-card">
+                            <div class="plan-name">Starter</div>
+                            <div class="plan-price">19€ <span>/mois</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> 1 utilisateur</li>
+                                <li><i class="fas fa-check"></i> 50 biens max</li>
+                                <li><i class="fas fa-check"></i> Exports CSV</li>
+                                <li><i class="fas fa-times" style="color:#b13e3e;"></i> PDF personnalisé</li>
+                                <li><i class="fas fa-times" style="color:#b13e3e;"></i> Support prioritaire</li>
+                            </ul>
+                            <button class="btn btn-outline" onclick="subscribe('Starter')">Choisir</button>
+                        </div>
+                        <div class="pricing-card popular">
+                            <div class="badge-popular">⭐ POPULAIRE</div>
+                            <div class="plan-name">Pro</div>
+                            <div class="plan-price">49€ <span>/mois</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> 3 utilisateurs</li>
+                                <li><i class="fas fa-check"></i> Biens illimités</li>
+                                <li><i class="fas fa-check"></i> PDF personnalisé</li>
+                                <li><i class="fas fa-check"></i> Rapport de traçabilité</li>
+                                <li><i class="fas fa-check"></i> Support prioritaire</li>
+                            </ul>
+                            <button class="btn btn-primary" onclick="subscribe('Pro')">Choisir</button>
+                        </div>
+                        <div class="pricing-card">
+                            <div class="plan-name">Enterprise</div>
+                            <div class="plan-price">99€ <span>/mois</span></div>
+                            <ul class="plan-features">
+                                <li><i class="fas fa-check"></i> Utilisateurs illimités</li>
+                                <li><i class="fas fa-check"></i> API dédiée</li>
+                                <li><i class="fas fa-check"></i> Hébergement dédié</li>
+                                <li><i class="fas fa-check"></i> Formation incluse</li>
+                                <li><i class="fas fa-check"></i> Support 24/7</li>
+                            </ul>
+                            <button class="btn btn-outline" onclick="subscribe('Enterprise')">Contacter</button>
+                        </div>
+                    </div>
+                    <div style="margin-top:20px;padding:16px;background:#e8edf5;border-radius:12px;font-size:13px;color:#1a4b6d;">
+                        <i class="fas fa-lock"></i> Paiement sécurisé · Essai gratuit de 30 jours
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE : SCRAPING
+                ============================================================ -->
+                <div class="page" id="page-scraping">
+                    <h3 style="font-size:18px;color:#0b3b5c;">
+                        <i class="fas fa-search"></i> Scraping d'agences
+                    </h3>
+                    <p style="color:#5b6f87;font-size:14px;margin-bottom:16px;">
+                        Récupérez les coordonnées des agences immobilières dans votre secteur.
+                    </p>
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+                        <input type="text" id="scrapingCity" placeholder="Ville (ex: Paris)" style="padding:10px 16px;border-radius:12px;border:1.5px solid #d9e1ed;flex:1;min-width:150px;" />
+                        <button class="btn btn-primary" onclick="runScraping()">
+                            <i class="fas fa-play"></i> Lancer le scraping
+                        </button>
+                        <button class="btn btn-outline" onclick="alert('📥 Export des données en cours...')">
+                            <i class="fas fa-download"></i> Exporter
+                        </button>
+                    </div>
+                    <div id="scrapingResults" class="scraping-results">
+                        <!-- Rempli par JS -->
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE : RAPPORTS
+                ============================================================ -->
+                <div class="page" id="page-rapports">
+                    <h3 style="font-size:18px;color:#0b3b5c;">
+                        <i class="fas fa-file-alt"></i> Génération de rapports
+                    </h3>
+                    <p style="color:#5b6f87;font-size:14px;margin-bottom:16px;">
+                        Créez des rapports personnalisés pour vos clients.
+                    </p>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                        <div>
+                            <label style="font-weight:600;font-size:13px;display:block;margin-bottom:4px;">Nom du client</label>
+                            <input type="text" id="reportClient" placeholder="Ex: Dupont" style="width:100%;padding:10px 14px;border-radius:12px;border:1.5px solid #d9e1ed;" />
+                        </div>
+                        <div>
+                            <label style="font-weight:600;font-size:13px;display:block;margin-bottom:4px;">Bien concerné</label>
+                            <select id="reportProperty" style="width:100%;padding:10px 14px;border-radius:12px;border:1.5px solid #d9e1ed;">
+                                <option value="">Sélectionnez un bien</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                        <button class="btn btn-primary" onclick="generateReport()">
+                            <i class="fas fa-file-pdf"></i> Générer le rapport PDF
+                        </button>
+                        <button class="btn btn-outline" onclick="alert('📄 Aperçu du rapport')">
+                            <i class="fas fa-eye"></i> Aperçu
+                        </button>
+                        <button class="btn btn-outline" onclick="alert('📧 Envoyer par email')">
+                            <i class="fas fa-envelope"></i> Envoyer
+                        </button>
+                    </div>
+                    <div style="margin-top:20px;background:#f8faff;border-radius:12px;padding:16px;border:1px solid #e9eef6;">
+                        <p style="font-size:13px;color:#5b6f87;">
+                            <i class="fas fa-info-circle"></i> Le rapport inclut : estimation, sources, traçabilité, niveau de confiance.
+                        </p>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    COMPARE BAR (flottante)
+    ============================================================ -->
+    <div id="compareBar">
+        <span class="count"><i class="fas fa-balance-scale"></i> <span id="compareBarCount">0</span> biens sélectionnés</span>
+        <button class="btn" onclick="clearCompare()"><i class="fas fa-times"></i> Effacer</button>
+        <button class="btn btn-success" onclick="showCompare()"><i class="fas fa-arrow-right"></i> Comparer</button>
+    </div>
+
+    <!-- ============================================================
+    DETAIL MODAL
+    ============================================================ -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal">
+            <h2 id="modalTitle">Villa Les Oliviers</h2>
+            <p class="modal-sub" id="modalSub">75008 Paris · Réf. DVF-2025-075-001284</p>
+            <div class="detail-grid" id="modalGrid"></div>
+            <div class="actions-modal">
+                <button class="btn btn-success" onclick="validateFromModal()"><i class="fas fa-check"></i> Valider</button>
+                <button class="btn btn-outline" onclick="closeModal()">Fermer</button>
+                <button class="btn btn-outline" onclick="alert('📄 Rapport PDF généré')"><i class="fas fa-file-pdf"></i> Rapport</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    DEMO POPUP
+    ============================================================ -->
+    <div class="demo-popup" id="demoPopup">
+        <button class="btn-close-demo" onclick="closeDemo()">✕</button>
+        <div class="step">Étape 1 / 5</div>
+        <div class="title" id="demoTitle">👋 Bienvenue sur ImmoHub Pro</div>
+        <div class="desc" id="demoDesc">Découvrez comment estimer vos biens en 3 minutes avec des données sourcées.</div>
+        <button class="btn btn-primary" onclick="nextDemoStep()" style="width:100%;justify-content:center;">
+            Suivant <i class="fas fa-arrow-right"></i>
+        </button>
+        <button class="btn btn-outline" onclick="closeDemo()" style="width:100%;justify-content:center;margin-top:6px;font-size:12px;">
+            Passer la démo
+        </button>
+    </div>
+
+
+    <script>
+        // ================================================================
+        //  DATA
+        // ================================================================
+        let dataSet = [{
+            id: 1,
+            property: 'Villa Les Oliviers',
+            location: '75008 Paris',
+            value: '1 250 000 €',
+            source: 'Base notariale 2025',
+            sourceShort: 'notaire',
+            confidence: 98,
+            status: 'verified',
+            statusLabel: 'Vérifié',
+            date: '15/06/2025',
+            ref: 'DVF-2025-075-001284',
+            validator: 'Marie Dupont · Agent immobilier',
+            surface: '185 m²',
+            rooms: 6,
+            year: '2018'
+        }, {
+            id: 2,
+            property: 'Appartement Haussmann',
+            location: '75016 Paris',
+            value: '890 000 €',
+            source: 'DVF 2024',
+            sourceShort: 'dvf',
+            confidence: 92,
+            status: 'verified',
+            statusLabel: 'Vérifié',
+            date: '02/05/2025',
+            ref: 'DVF-2024-075-089234',
+            validator: 'Luc Martin · Expert',
+            surface: '112 m²',
+            rooms: 4,
+            year: '1890'
+        }, {
+            id: 3,
+            property: 'Loft industriel',
+            location: '75011 Paris',
+            value: '620 000 €',
+            source: 'Annonces (3 sources)',
+            sourceShort: 'annonces',
+            confidence: 72,
+            status: 'pending',
+            statusLabel: 'En attente',
+            date: '22/06/2025',
+            ref: 'AGG-2025-011-004567',
+            validator: '— Validation en cours',
+            surface: '95 m²',
+            rooms: 2,
+            year: '2005'
+        }, {
+            id: 4,
+            property: 'Maison de ville',
+            location: '92100 Boulogne',
+            value: '780 000 €',
+            source: 'Cadastre + notaire',
+            sourceShort: 'cadastre',
+            confidence: 95,
+            status: 'verified',
+            statusLabel: 'Vérifié',
+            date: '10/06/2025',
+            ref: 'CAD-2025-092-000342',
+            validator: 'Sophie Lefèvre · Géomètre',
+            surface: '150 m²',
+            rooms: 5,
+            year: '2002'
+        }, {
+            id: 5,
+            property: 'Studio Saint-Germain',
+            location: '75006 Paris',
+            value: '420 000 €',
+            source: 'Base notariale 2024',
+            sourceShort: 'notaire',
+            confidence: 88,
+            status: 'discrepancy',
+            statusLabel: '⚠️ Écart',
+            date: '05/12/2024',
+            ref: 'DVF-2024-075-076543',
+            validator: 'Écart signalé — révision nécessaire',
+            surface: '38 m²',
+            rooms: 1,
+            year: '1965'
+        }, {
+            id: 6,
+            property: 'Pavillon avec jardin',
+            location: '78100 Saint-Germain',
+            value: '540 000 €',
+            source: 'Diagnostics + DVF',
+            sourceShort: 'diagnostic',
+            confidence: 65,
+            status: 'pending',
+            statusLabel: 'En attente',
+            date: '28/06/2025',
+            ref: 'DIA-2025-078-000891',
+            validator: '— Donnée partielle',
+            surface: '130 m²',
+            rooms: 4,
+            year: '1980'
+        }, {
+            id: 7,
+            property: 'Immeuble de rapport',
+            location: '75010 Paris',
+            value: '2 100 000 €',
+            source: 'Base notariale 2025',
+            sourceShort: 'notaire',
+            confidence: 97,
+            status: 'verified',
+            statusLabel: 'Vérifié',
+            date: '20/06/2025',
+            ref: 'DVF-2025-075-099123',
+            validator: 'Jean Moreau · Expert-comptable',
+            surface: '320 m²',
+            rooms: 12,
+            year: '1925'
+        }];
+
+        let compareList = [];
+        let currentModalId = null;
+        let demoStep = 0;
+
+        // ================================================================
+        //  LOGIN
+        // ================================================================
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const pwd = document.getElementById('loginPassword').value;
+            if (email === 'demo@immo.fr' && pwd === 'demo123') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'block';
+                document.getElementById('userName').textContent = 'Jean Dupont';
+                initApp();
+            } else {
+                alert('❌ Identifiants incorrects. Utilisez demo@immo.fr / demo123');
+            }
+        }
+
+        function logout() {
+            if (confirm('Déconnecter ?')) {
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('appContainer').style.display = 'none';
+            }
+        }
+
+        // ================================================================
+        //  INIT
+        // ================================================================
+        function initApp() {
+            renderStats();
+            renderTable(dataSet);
+            renderDashTable(dataSet.slice(0, 5));
+            populateReportSelect();
+            updateCompareCount();
+            // Lancer la démo automatiquement
+            setTimeout(() => {
+                document.getElementById('demoPopup').classList.add('active');
+                demoStep = 0;
+                updateDemoStep();
+            }, 800);
+        }
+
+        // ================================================================
+        //  NAVIGATION
+        // ================================================================
+        function switchPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+            document.querySelectorAll('.sidebar .menu-item').forEach(m => m.classList.remove('active'));
+            document.querySelector('.sidebar .menu-item[data-page="' + page + '"]').classList.add('active');
+        }
+
+        // ================================================================
+        //  RENDER STATS
+        // ================================================================
+        function renderStats() {
+            const total = dataSet.length;
+            const verified = dataSet.filter(d => d.status === 'verified').length;
+            const pending = dataSet.filter(d => d.status === 'pending').length;
+            const discrep = dataSet.filter(d => d.status === 'discrepancy').length;
+            const avgConf = Math.round(dataSet.reduce((s, d) => s + d.confidence, 0) / total);
+
+            document.getElementById('statsContainer').innerHTML = `
+                        <div class="stat-card">
+                            <div class="label"><i class="fas fa-home"></i> Biens indexés</div>
+                            <div class="value">${total}</div>
+                            <div class="sub green">▲ +12 ce mois</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label"><i class="fas fa-database"></i> Sources connectées</div>
+                            <div class="value">12</div>
+                            <div class="sub">API, fichiers, bases</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label"><i class="fas fa-check-circle"></i> Vérifiés</div>
+                            <div class="value">${verified}</div>
+                            <div class="sub green">${Math.round(verified/total*100)}% du total</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label"><i class="fas fa-exclamation-triangle"></i> Écarts</div>
+                            <div class="value" style="color:#b13e3e;">${discrep}</div>
+                            <div class="sub red">${pending} en attente</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label"><i class="fas fa-chart-line"></i> Confiance moyenne</div>
+                            <div class="value">${avgConf}%</div>
+                            <div class="sub green">▲ 3% vs mois dernier</div>
+                        </div>
+                    `;
+        }
+
+        // ================================================================
+        //  RENDER TABLE (page Biens)
+        // ================================================================
+        function renderTable(data) {
+            const tbody = document.getElementById('dataTableBody');
+            tbody.innerHTML = '';
+            data.forEach(item => {
+                let confClass = 'high';
+                if (item.confidence < 70) confClass = 'low';
+                else if (item.confidence < 85) confClass = 'medium';
+
+                const isChecked = compareList.includes(item.id);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                            <td style="text-align:center;">
+                                <input type="checkbox" class="compare-checkbox" 
+                                       data-id="${item.id}" 
+                                       ${isChecked ? 'checked' : ''} 
+                                       onchange="toggleCompare(${item.id})" />
+                            </td>
+                            <td>
+                                <div class="prop-name">${item.property}</div>
+                                <div class="prop-loc"><i class="fas fa-map-pin" style="font-size:10px;"></i> ${item.location}</div>
+                            </td>
+                            <td style="font-weight:700;">${item.value}</td>
+                            <td><span class="source-tag"><i class="fas fa-tag" style="font-size:10px;"></i> ${item.source}</span></td>
+                            <td>
+                                <div class="conf-bar">
+                                    <span style="font-weight:600;font-size:12px;">${item.confidence}%</span>
+                                    <div class="conf-track">
+                                        <div class="conf-fill ${confClass}" style="width:${item.confidence}%;"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="status-tag ${item.status}">${item.status === 'verified' ? '✅' : item.status === 'pending' ? '⏳' : '⚠️'} ${item.statusLabel}</span></td>
+                            <td>
+                                <div class="actions-cell">
+                                    <button class="btn btn-outline btn-sm" onclick="openModal(${item.id})"><i class="fas fa-eye"></i></button>
+                                    ${item.status !== 'verified' ? 
+                                        `<button class="btn btn-success btn-sm" onclick="validateItem(${item.id})"><i class="fas fa-check"></i></button>` : 
+                                        `<span style="font-size:11px;color:#1a7a5a;"><i class="fas fa-lock"></i></span>`
+                                    }
+                                    <button class="btn btn-outline btn-sm" onclick="alert('📄 Rapport PDF pour ${item.property}')"><i class="fas fa-file-pdf"></i></button>
+                                </div>
+                            </td>
+                        `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ================================================================
+        //  RENDER DASHBOARD TABLE
+        // ================================================================
+        function renderDashTable(data) {
+            const tbody = document.getElementById('dashTableBody');
+            tbody.innerHTML = '';
+            data.forEach(item => {
+                let confClass = 'high';
+                if (item.confidence < 70) confClass = 'low';
+                else if (item.confidence < 85) confClass = 'medium';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                            <td>
+                                <div class="prop-name">${item.property}</div>
+                                <div class="prop-loc"><i class="fas fa-map-pin" style="font-size:10px;"></i> ${item.location}</div>
+                            </td>
+                            <td style="font-weight:700;">${item.value}</td>
+                            <td><span class="source-tag">${item.source}</span></td>
+                            <td>
+                                <div class="conf-bar">
+                                    <span style="font-weight:600;font-size:12px;">${item.confidence}%</span>
+                                    <div class="conf-track">
+                                        <div class="conf-fill ${confClass}" style="width:${item.confidence}%;"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="status-tag ${item.status}">${item.status === 'verified' ? '✅' : item.status === 'pending' ? '⏳' : '⚠️'} ${item.statusLabel}</span></td>
+                            <td style="text-align:center;">
+                                <button class="btn btn-outline btn-sm" onclick="openModal(${item.id})"><i class="fas fa-eye"></i></button>
+                            </td>
+                        `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ================================================================
+        //  FILTERS
+        // ================================================================
+        function applyFilters() {
+            const sourceVal = document.getElementById('sourceFilter').value;
+            const statusVal = document.getElementById('statusFilter').value;
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+
+            const filtered = dataSet.filter(item => {
+                const matchSource = sourceVal === 'all' || item.sourceShort === sourceVal;
+                const matchStatus = statusVal === 'all' || item.status === statusVal;
+                const matchSearch = item.property.toLowerCase().includes(searchVal) ||
+                    item.location.toLowerCase().includes(searchVal) ||
+                    item.value.includes(searchVal) ||
+                    item.source.toLowerCase().includes(searchVal);
+                return matchSource && matchStatus && matchSearch;
+            });
+            renderTable(filtered);
+        }
+
+        document.getElementById('sourceFilter').addEventListener('change', applyFilters);
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+
+        // ================================================================
+        //  COMPARE
+        // ================================================================
+        function toggleCompare(id) {
+            const idx = compareList.indexOf(id);
+            if (idx > -1) {
+                compareList.splice(idx, 1);
+            } else {
+                if (compareList.length >= 4) {
+                    alert('⚠️ Vous pouvez comparer jusqu\'à 4 biens maximum.');
+                    // Réinitialiser la checkbox
+                    document.querySelectorAll('.compare-checkbox').forEach(cb => {
+                        if (parseInt(cb.dataset.id) === id) cb.checked = false;
+                    });
+                    return;
+                }
+                compareList.push(id);
+            }
+            updateCompareCount();
+            // Mettre à jour l'état des checkboxes
+            document.querySelectorAll('.compare-checkbox').forEach(cb => {
+                cb.checked = compareList.includes(parseInt(cb.dataset.id));
+            });
+        }
+
+        function updateCompareCount() {
+            document.getElementById('compareCount').textContent = compareList.length;
+            document.getElementById('compareBarCount').textContent = compareList.length;
+            document.getElementById('compareBar').classList.toggle('active', compareList.length > 1);
+        }
+
+        function clearCompare() {
+            compareList = [];
+            document.querySelectorAll('.compare-checkbox').forEach(cb => cb.checked = false);
+            updateCompareCount();
+            document.getElementById('compareContainer').innerHTML = `
+                        <i class="fas fa-arrows-h" style="font-size:32px;display:block;margin-bottom:8px;"></i>
+                        Aucun bien sélectionné. Allez dans la page <strong>Biens</strong> et cochez les biens à comparer.
+                    `;
+        }
+
+        function showCompare() {
+            if (compareList.length < 2) {
+                alert('⚠️ Sélectionnez au moins 2 biens à comparer.');
+                return;
+            }
+            const items = dataSet.filter(d => compareList.includes(d.id));
+            let html = `
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;">
+                    `;
+            items.forEach(item => {
+                html += `
+                            <div style="background:white;border-radius:12px;padding:16px;border:1px solid #e9eef6;">
+                                <div style="font-weight:800;color:#0b3b5c;">${item.property}</div>
+                                <div style="font-size:12px;color:#5b6f87;">${item.location}</div>
+                                <div style="font-size:20px;font-weight:800;color:#0b3b5c;margin:8px 0;">${item.value}</div>
+                                <div style="font-size:13px;color:#1a2a3e;">📐 ${item.surface || 'N/C'}</div>
+                                <div style="font-size:13px;color:#1a2a3e;">🛏 ${item.rooms || 'N/C'} pièces</div>
+                                <div style="font-size:13px;color:#1a2a3e;">📊 Confiance ${item.confidence}%</div>
+                                <div style="font-size:12px;color:#5b6f87;margin-top:4px;">📌 ${item.source}</div>
+                                <span class="status-tag ${item.status}" style="margin-top:6px;display:inline-block;">${item.statusLabel}</span>
+                            </div>
+                        `;
+            });
+            html += `</div>`;
+            document.getElementById('compareContainer').innerHTML = html;
+            // Basculer vers la page comparateur
+            switchPage('comparateur');
+        }
+
+        // ================================================================
+        //  MODAL
+        // ================================================================
+        function openModal(id) {
+            const item = dataSet.find(d => d.id === id);
+            if (!item) return;
+            currentModalId = id;
+
+            document.getElementById('modalTitle').textContent = item.property;
+            document.getElementById('modalSub').textContent = `${item.location} · Réf. ${item.ref}`;
+
+            document.getElementById('modalGrid').innerHTML = `
+                        <div class="detail-item">
+                            <div class="label">💰 Valeur</div>
+                            <div class="value">${item.value}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="label">📌 Source</div>
+                            <div class="value">${item.source}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="label">📅 Date</div>
+                            <div class="value">${item.date}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="label">🔗 Référence</div>
+                            <div class="value mono">${item.ref}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="label">📐 Surface</div>
+                            <div class="value">${item.surface || 'Non renseignée'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="label">🛏 Pièces</div>
+                            <div class="value">${item.rooms || 'N/C'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="label">📊 Confiance</div>
+                            <div class="value">${item.confidence}%</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="label">📌 Statut</div>
+                            <div class="value">${item.status === 'verified' ? '✅' : item.status === 'pending' ? '⏳' : '⚠️'} ${item.statusLabel}</div>
+                        </div>
+                        <div class="detail-item" style="grid-column:1/-1;">
+                            <div class="label">👤 Validé par</div>
+                            <div class="value">${item.validator}</div>
+                        </div>
+                    `;
+
+            document.getElementById('detailModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.remove('active');
+            currentModalId = null;
+        }
+
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        function validateFromModal() {
+            if (currentModalId !== null) {
+                validateItem(currentModalId);
+                closeModal();
+            }
+        }
+
+        // ================================================================
+        //  ACTIONS
+        // ================================================================
+        function validateItem(id) {
+            const item = dataSet.find(d => d.id === id);
+            if (!item) return;
+            if (item.status === 'verified') {
+                alert('✅ Ce bien est déjà vérifié.');
+                return;
+            }
+            item.status = 'verified';
+            item.statusLabel = 'Vérifié';
+            item.validator = 'Jean Dupont · Agent immobilier';
+            renderStats();
+            applyFilters();
+            renderDashTable(dataSet.slice(0, 5));
+            alert(`✅ Bien "${item.property}" marqué comme vérifié.`);
+        }
+
+        function addProperty() {
+            const name = prompt('🏠 Nom du bien :');
+            if (!name) return;
+            const location = prompt('📍 Localisation :');
+            if (!location) return;
+            const value = prompt('💰 Valeur estimée (ex: 550 000 €) :');
+            if (!value) return;
+
+            const newItem = {
+                id: Date.now(),
+                property: name,
+                location: location,
+                value: value,
+                source: 'Saisie manuelle',
+                sourceShort: 'annonces',
+                confidence: 50,
+                status: 'pending',
+                statusLabel: 'En attente',
+                date: new Date().toLocaleDateString('fr-FR'),
+                ref: 'MAN-' + Date.now().toString().slice(-6),
+                validator: '— En attente de validation',
+                surface: 'N/C',
+                rooms: 'N/C',
+                year: 'N/C'
+            };
+            dataSet.push(newItem);
+            renderStats();
+            applyFilters();
+            renderDashTable(dataSet.slice(0, 5));
+            populateReportSelect();
+            alert(`✅ Bien "${name}" ajouté avec succès !`);
+        }
+
+        // ================================================================
+        //  REPORT
+        // ================================================================
+        function populateReportSelect() {
+            const sel = document.getElementById('reportProperty');
+            sel.innerHTML = '<option value="">Sélectionnez un bien</option>';
+            dataSet.forEach(item => {
+                sel.innerHTML += `<option value="${item.id}">${item.property} - ${item.value}</option>`;
+            });
+        }
+
+        function generateReport() {
+            const client = document.getElementById('reportClient').value || 'Client';
+            const propId = document.getElementById('reportProperty').value;
+            if (!propId) {
+                alert('⚠️ Veuillez sélectionner un bien.');
+                return;
+            }
+            const item = dataSet.find(d => d.id === parseInt(propId));
+            if (!item) return;
+
+            const content = `
+                        ========================================
+                        RAPPORT D'ESTIMATION IMMOBILIÈRE
+                        ========================================
+
+                        Client : ${client}
+                        Date   : ${new Date().toLocaleDateString('fr-FR')}
+
+                        --- BIEN ---
+                        Nom       : ${item.property}
+                        Localisation : ${item.location}
+                        Surface   : ${item.surface || 'N/C'}
+                        Pièces    : ${item.rooms || 'N/C'}
+
+                        --- ESTIMATION ---
+                        Valeur    : ${item.value}
+                        Confiance : ${item.confidence}%
+                        Source    : ${item.source}
+                        Référence : ${item.ref}
+
+                        --- TRAÇABILITÉ ---
+                        Validé par : ${item.validator}
+                        Date validation : ${item.date}
+
+                        --- MENTIONS ---
+                        Ce rapport a été généré automatiquement par ImmoHub Pro.
+                        Les données sont sourcées et traçables.
+
+                        Signature : _________________
+                    `;
+
+            // Simuler un téléchargement de rapport
+            alert('📄 Rapport PDF généré avec succès !\n\n' + content.substring(0, 300) + '...\n\n💡 Fonctionnalité premium : version complète avec mise en page professionnelle.');
+        }
+
+        // ================================================================
+        //  EXPORT PDF
+        // ================================================================
+        function exportPDF() {
+            alert('📄 Génération du rapport PDF en cours...\n\n' +
+                'Le rapport inclut :\n' +
+                '• Tous les biens avec leurs sources\n' +
+                '• Les niveaux de confiance\n' +
+                '• Les écarts détectés\n' +
+                '• La traçabilité des validations\n\n' +
+                '💡 Version complète disponible dans le plan Pro.');
+        }
+
+        // ================================================================
+        //  SUBSCRIPTION
+        // ================================================================
+        function subscribe(plan) {
+            alert(`✅ Vous avez choisi le plan ${plan} !\n\nUn email de confirmation vous sera envoyé.\n\n💡 Offre spéciale : 30 jours gratuits, sans engagement.`);
+        }
+
+        // ================================================================
+        //  SCRAPING
+        // ================================================================
+        function runScraping() {
+            const city = document.getElementById('scrapingCity').value || 'Paris';
+            const container = document.getElementById('scrapingResults');
+
+            // Simuler des résultats de scraping
+            const results = [
+                { name: 'Agence Dupont Immobilier', address: '12 rue de la Paix, ' + city, phone: '01 23 45 67 89' },
+                { name: 'Capitale Immo', address: '45 avenue des Champs, ' + city, phone: '01 98 76 54 32' },
+                { name: 'Groupe Immobilier Martin', address: '78 boulevard Haussmann, ' + city, phone: '01 45 67 89 01' },
+                { name: 'Agence du Centre', address: '3 place de la République, ' + city, phone: '01 34 56 78 90' },
+                { name: 'Immobilier de France', address: '22 rue du Faubourg, ' + city, phone: '01 56 78 90 12' },
+                { name: 'Nexity Proximité', address: '99 avenue de la Grande Armée, ' + city, phone: '01 67 89 01 23' },
+            ];
+
+            container.innerHTML = results.map(r => `
+                        <div class="scraping-card">
+                            <div class="info">
+                                <div class="name">${r.name}</div>
+                                <div class="addr"><i class="fas fa-map-pin"></i> ${r.address}</div>
+                                <div class="addr" style="font-size:11px;color:#0b3b5c;"><i class="fas fa-phone"></i> ${r.phone}</div>
+                            </div>
+                            <button class="btn btn-outline btn-sm" onclick="alert('📞 ${r.name} - ${r.phone}')"><i class="fas fa-phone"></i></button>
+                            <button class="btn btn-success btn-sm" onclick="alert('✅ Agence ajoutée à votre carnet d\'adresses')"><i class="fas fa-plus"></i></button>
+                        </div>
+                    `).join('');
+
+            container.innerHTML += `
+                        <div style="grid-column:1/-1;text-align:center;font-size:13px;color:#5b6f87;padding:12px;background:#e8edf5;border-radius:12px;">
+                            <i class="fas fa-info-circle"></i> ${results.length} agences trouvées dans ${city}. 
+                            <button class="btn btn-outline btn-sm" onclick="alert('📥 Export des ${results.length} contacts')"><i class="fas fa-download"></i> Exporter</button>
+                        </div>
+                    `;
+        }
+
+        // ================================================================
+        //  DEMO TOUR
+        // ================================================================
+        const demoSteps = [{
+            title: '👋 Bienvenue sur ImmoHub Pro',
+            desc: 'Découvrez comment estimer vos biens en 3 minutes avec des données sourcées et traçables.'
+        }, {
+            title: '📊 Tableau de bord',
+            desc: 'En un coup d\'œil, visualisez le nombre de biens, leur taux de vérification et les écarts détectés.'
+        }, {
+            title: '🔍 Recherche et filtres',
+            desc: 'Retrouvez n\'importe quel bien en 3 secondes grâce aux filtres par source, statut ou recherche textuelle.'
+        }, {
+            title: '✅ Validation humaine',
+            desc: 'C\'est vous qui validez les données ! Chaque validation est tracée et engage votre responsabilité professionnelle.'
+        }, {
+            title: '📄 Rapports PDF',
+            desc: 'Générez des rapports personnalisés pour vos clients avec toutes les sources et la traçabilité des données.'
+        }];
+
+        function toggleDemo() {
+            document.getElementById('demoPopup').classList.toggle('active');
+            if (document.getElementById('demoPopup').classList.contains('active')) {
+                demoStep = 0;
+                updateDemoStep();
+            }
+        }
+
+        function closeDemo() {
+            document.getElementById('demoPopup').classList.remove('active');
+        }
+
+        function nextDemoStep() {
+            demoStep++;
+            if (demoStep >= demoSteps.length) {
+                closeDemo();
+                alert('🎉 Démo terminée ! Vous maîtrisez maintenant les bases d\'ImmoHub Pro.\n\nPassez à l\'étape suivante : testez les fonctionnalités par vous-même !');
+                return;
+            }
+            updateDemoStep();
+        }
+
+        function updateDemoStep() {
+            const step = demoSteps[demoStep];
+            document.querySelector('.demo-popup .step').textContent = `Étape ${demoStep + 1} / ${demoSteps.length}`;
+            document.getElementById('demoTitle').textContent = step.title;
+            document.getElementById('demoDesc').textContent = step.desc;
+        }
+
+        // ================================================================
+        //  KEYBOARD SHORTCUTS
+        // ================================================================
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeDemo();
+            }
+            if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') {
+                handleLogin();
+            }
+        });
+
+        // ================================================================
+        //  INIT LOGIN (Enter key)
+        // ================================================================
+        document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handleLogin();
+        });
+        document.getElementById('loginEmail').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handleLogin();
+        });
+
+        console.log('🏠 ImmoHub Pro v3.0 - Application complète');
+        console.log('📊 ' + dataSet.length + ' biens indexés');
+        console.log('✅ Fonctionnalités : login, dashboard, biens, comparateur, tarifs, scraping, rapports, demo');
+        console.log('🔑 Identifiants : demo@immo.fr / demo123');
+    </script>
+
+</body>
+</html>
